@@ -2,6 +2,7 @@ import AppLogoIcon from '@/components/app-logo-icon';
 import { Link } from '@inertiajs/react';
 import { Home } from '@/routes';
 import { type PropsWithChildren } from 'react';
+import { ShoppingCart } from 'lucide-react';
 
 interface AuthLayoutProps {
     name?: string;
@@ -23,14 +24,23 @@ export default function AuthSimpleLayout({
                             href={Home()}
                             className="flex flex-col items-center gap-2 font-medium"
                         >
-                            <div className="mb-1 flex h-9 w-9 items-center justify-center rounded-md">
-                                <AppLogoIcon className="size-9 fill-current text-[var(--foreground)] dark:text-white" />
+                            <div className="mb-1 text-3xl font-bold flex h-9 gap-3 w-full items-center justify-center rounded-md">
+                                <ShoppingCart color="white" size={50}/>
+
+                                <span>
+                                    Shopping Online
+                                </span>
                             </div>
-                            <span className="sr-only">{title}</span>
+                            <span className="sr-only">
+                                {title}
+                            </span>
                         </Link>
 
                         <div className="space-y-2 text-center">
-                            <h1 className="text-xl font-medium">{title}</h1>
+                            <h1 className="text-xl font-medium">
+                                {title}
+                            </h1>
+
                             <p className="text-center text-sm text-muted-foreground">
                                 {description}
                             </p>

@@ -35,13 +35,17 @@ const ProductCard = ({
 } : Props) => {
   return (
     <div className={`flex flex-col transition-all my-6 gap-4 w-[400px] border-2 p-3 rounded-xl ${selected ? 'fixed top-1/2 left-1/2 translate-[-50%] bg-black flex-row w-[1000px]' : ''}`}>
-      <img className='w-100 h-50 object-cover rounded-xl' src={`img/${img}`} alt="holderplace" /> 
+      <img 
+        className={`w-100 object-cover rounded-xl ${selected ? 'h-100' : 'h-50'}`} 
+        src={`img/${img}`} 
+        alt={title} 
+      /> 
       <div className="flex flex-col flex-1 gap-2">
         <h3 className='text-2xl'>{title}</h3>
         <div className="flex gap-2">
           <p className='text-gray-500'>{category}</p>
           <span className="text-[#a0a0a0]">●</span>
-          <p className='text-md'>{init_day}</p>
+          <p className='text-md'>{new Date(init_day ?? 'Sem data').toLocaleString('pt-BR')}</p>
         </div>
         <p>{description}</p>
         <div className="mt-auto flex flex-col gap-3">
@@ -62,7 +66,11 @@ const ProductCard = ({
           {!bought && (
             <div className="flex gap-2">
             {amount > 0 ? (
-              <button onClick={!selected ? selectProduct : buyProduct} className='border-2 flex-1 p-2 rounded-xl bg-white text-black font-semibold cursor-pointer transition hover:opacity-80 active:opacity-50'>{selected ? 'Confirmar Compra' : 'Comprar'}</button>
+              <button 
+                onClick={!selected ? selectProduct : buyProduct} 
+                className='border-2 flex-1 p-2 rounded-xl bg-white text-black font-semibold cursor-pointer transition hover:opacity-80 active:opacity-50'>
+                  {selected ? 'Confirmar Compra' : 'Comprar'}
+                </button>
             ) : (
               <button className='flex-1 p-2 rounded-xl text-red-500 font-semibold'>{selected ? 'Confirmar Compra' : 'Fora de Estoque'}</button>
             ) }

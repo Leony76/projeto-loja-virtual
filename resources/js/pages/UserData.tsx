@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import AppLayout from "../layouts/app/AppLayout"
-import { router, usePage } from "@inertiajs/react"
+import { Head, router, usePage } from "@inertiajs/react"
 import Toast from "@/components/Toast"
 import moneyFormatter from "@/utils/moneyFormatter"
 
@@ -70,6 +70,9 @@ const UserData = () => {
         <Toast type={toast.type} message={toast.message}/>
       )}
       <div className="flex w-[60%] m-auto">
+
+        <Head title="Dados do Usuário"/>
+
         <div className="flex flex-col border-2 rounded-md h-fit w-fit m-7">
           <button onClick={() => setViewMode('edit')} className={`py-2 px-4 border-b-2 rounded-tl-md rounded-tr-md font-semibold cursor-pointer transition-all ${viewMode == 'edit' ? 'bg-white text-black' : ''}`}>Alterar Dados</button>
           <button onClick={() => setViewMode('view')} className={`py-2 px-4 rounded-bl-md rounded-br-md font-semibold cursor-pointer transition-all ${viewMode == 'view' ? 'bg-white text-black' : ''}`}>Visualizar Dados</button>

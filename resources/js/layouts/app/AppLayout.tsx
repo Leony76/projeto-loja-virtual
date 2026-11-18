@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react"
+import { Link, router } from "@inertiajs/react"
 import { ShoppingCart } from "lucide-react"
 import { ReactNode } from "react"
 import FlashMessage from "@/components/FlashMessage"
@@ -17,6 +17,16 @@ const AppLayout = ({children}:{children:ReactNode}) => {
             <li><Link className="text-white font-semibold text-decoration-none transition-[.5s] hover:opacity-50" href={'/products'}>Produtos</Link></li>
             <li><Link className="text-white font-semibold text-decoration-none transition-[.5s] hover:opacity-50" href={'/my-products'}>Meus Produtos</Link></li>
             <li><Link className="text-white font-semibold text-decoration-none transition-[.5s] hover:opacity-50" href={'/user-data'}>Dados do usuário</Link></li>
+            <li>
+              <Link
+              href="/logout"
+              method="post"
+              as="button"
+              className="text-white font-semibold transition-[.5s] hover:opacity-50 cursor-pointer"
+              >
+                Sair
+              </Link>
+            </li>
           </ul>
         </nav>
       </header>
@@ -25,7 +35,7 @@ const AppLayout = ({children}:{children:ReactNode}) => {
         {children}
       </main>
       <footer className=" flex justify-center bg-[#121212] p-10">
-        <span>&copy; Leony Leandro Barros </span>
+        <span>&copy; 2025 Leony Leandro Barros. Todos os direitos reservados. </span>
       </footer>
     </div>
   )

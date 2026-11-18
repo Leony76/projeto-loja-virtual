@@ -1,7 +1,7 @@
 import AppLayout from "@/layouts/app/AppLayout"
 import ProductCard from "@/components/ProductCard"
 import { Produto } from '@/hooks/useBuyProductModal';
-import { usePage } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
 type PageProps = {
   produtos?: Produto[];
@@ -13,6 +13,9 @@ const MyProducts = () => {
   return ( 
     <AppLayout> 
       <div className="bg-[#0A0A0A] p-5">
+
+        <Head title="Meus Produtos"/>
+
         <h2 className="text-center text-3xl font-bold">Meus Produtos</h2>
 				<div className='flex flex-wrap rounded-xl justify-evenly items-evenly'>
           {produtos.length === 0 && (
