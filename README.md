@@ -72,7 +72,7 @@ Ao selecionar um produto, o usuário pode visualizar seus detalhes e confirmar a
 - Lucide React
 
 ### Back-end
-- PHP 8.2+
+- PHP 8.4
 - Laravel 12
 - Laravel Fortify
 - SQLite
@@ -82,6 +82,8 @@ Ao selecionar um produto, o usuário pode visualizar seus detalhes e confirmar a
 - NPM
 - Git
 - PHPUnit
+- Docker
+- Docker Compose
 
 ## 📂 Estrutura do projeto
 
@@ -94,9 +96,10 @@ projeto-loja-virtual/
 ├── bootstrap/
 ├── config/
 ├── database/
-│   ├── database.sqlite
 │   ├── migrations/
 │   └── seeders/
+├── docker/
+│   └── setup.sh
 ├── public/
 ├── resources/
 │   ├── css/
@@ -108,7 +111,10 @@ projeto-loja-virtual/
 ├── routes/
 ├── storage/
 ├── tests/
+├── .dockerignore
 ├── .env.example
+├── compose.yaml
+├── Dockerfile
 ├── artisan
 ├── composer.json
 ├── package.json
@@ -119,17 +125,17 @@ projeto-loja-virtual/
 
 ### Pré-requisitos
 
-Antes de começar, certifique-se de possuir os seguintes programas instalados:
+Para executar o projeto utilizando Docker, é necessário ter instalado:
 
-- PHP 8.2 ou superior;
-- Composer;
-- Node.js e NPM;
-- Git.
+- Git;
+- Docker Desktop (Windows/macOS) ou Docker Engine com Docker Compose (Linux).
+
+**Não é necessário instalar PHP, Composer, Node.js ou NPM na máquina**, pois essas ferramentas são disponibilizadas pelos containers.
 
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/Leony76/projeto-loja-virtual
+git clone https://github.com/Leony76/projeto-loja-virtual.git
 ```
 
 Entre na pasta do projeto:
@@ -138,29 +144,129 @@ Entre na pasta do projeto:
 cd projeto-loja-virtual
 ```
 
-### 2. Instalar as dependências
+### 2. Configurar as variáveis de ambiente
 
-Instale as dependências do Laravel:
+Crie o arquivo `.env` a partir do arquivo de exemplo.
 
-```bash
-composer install
-```
-
-Instale as dependências do React:
-
-```bash
-npm install
-```
-
-### 3. Configurar as variáveis de ambiente
-
-Crie o arquivo `.env` a partir do arquivo de exemplo:
+No Linux/macOS:
 
 ```bash
 cp .env.example .env
 ```
 
-No Windows PowerShell, também é possível utilizar:
+No Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+### 3. Construir e iniciar o ambiente Docker
+
+Na raiz do projeto, execute:
+
+```bash
+docker compose up -d --build
+```
+
+Esse comando constrói as imagens necessárias e inicia automaticamente os serviços configurados no Docker Compose.
+
+Durante a inicialização, o container `setup` realiza a preparação do ambiente:
+
+- Instala as dependências do Composer;
+- Instala as dependências do NPM;
+- Prepara o banco de dados SQLite;
+- Gera a chave da aplicação, caso ainda não exista;
+- Limpa os caches do Laravel;
+- Executa as migrations.
+
+Após a conclusão da preparação, os serviços Laravel e Vite são iniciados automaticamente.
+
+### 4. Acessar a aplicação
+
+Com os containers em execução, acesse:
+
+- **Aplicação:** http://localhost:8000
+- **Vite:** http://localhost:5173
+
+### 5. Acompanhar os containers
+
+Para verificar o estado dos serviços:
+
+```bash
+docker compose ps -a
+```
+
+Para visualizar os logs:
+
+```bash
+docker compose logs -f
+```
+
+Para acompanhar os logs de um serviço específico:
+
+```bash
+docker compose logs -f laravel.test
+```
+
+```bash
+docker compose logs -f vite
+```
+
+### 6. Encerrar o ambiente
+
+Para parar os containers:
+
+```bash
+docker compose down
+```
+
+Esse comando encerra os serviços sem remover os volumes nomeados do Docker, preservando as dependências instaladas nesses volumes.
+
+Para iniciar novamente o ambiente:
+
+```bash
+docker compose up -d
+```
+
+### 💡 Desenvolvimento com Docker
+
+O projeto utiliza volumes para compartilhar os arquivos locais com os containers.
+
+Dessa forma, as alterações realizadas no código são refletidas durante o desenvolvimento:
+
+- Alterações em componentes React, TypeScript e CSS são detectadas pelo Vite, com atualização automática via HMR;
+- Alterações em arquivos PHP e Blade são refletidas ao atualizar a página;
+- As dependências do Composer e NPM permanecem armazenadas em volumes Docker.
+
+Não é necessário reconstruir as imagens a cada alteração no código-fonte.
+
+---
+
+## 🖥️ Execução sem Docker (opcional)
+
+Caso prefira executar o projeto diretamente na máquina, será necessário instalar:
+
+- PHP 8.4 ou superior;
+- Composer;
+- Node.js e NPM;
+- Git.
+
+### 1. Instalar as dependências
+
+```bash
+composer install
+npm install
+```
+
+### 2. Configurar o ambiente
+
+Crie o arquivo `.env`:
+
+```bash
+cp .env.example .env
+```
+
+No Windows PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
@@ -172,7 +278,7 @@ Gere a chave da aplicação:
 php artisan key:generate
 ```
 
-### 4. Configurar o banco de dados
+### 3. Configurar o banco de dados
 
 O projeto utiliza SQLite.
 
@@ -188,17 +294,13 @@ Execute as migrations:
 php artisan migrate
 ```
 
-### 5. Executar a aplicação
-
-Inicie o ambiente de desenvolvimento:
+### 4. Executar a aplicação
 
 ```bash
 composer run dev
 ```
 
-O comando inicia os serviços necessários para o desenvolvimento, incluindo o servidor Laravel e o Vite.
-
-Acesse a aplicação pelo endereço:
+Acesse a aplicação:
 
 ```text
 http://localhost:8000
